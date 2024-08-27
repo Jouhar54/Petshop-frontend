@@ -1,0 +1,41 @@
+{
+  "products": [
+    {
+      "name": "cat jk",
+      "category": "cat",
+      "description": "lka;l;",
+      "price": "25",
+      "imageSrc": "https://headsupfortails.com/cdn/shop/files/DSC_2566.jpg?v=1713440062&width=1100",
+      "quantity": 1,
+      "id": "4f3a0d68-bc4d-4f0e-a2d4-47fb4ad784f8",
+      "color": "redd"
+    },
+    {
+      "name": "Dog food",
+      "category": "dog",
+      "description": "meal",
+      "price": 7,
+      "imageSrc": "https://headsupfortails.com/cdn/shop/files/8906002482832.jpg?v=1715947995&width=1100",
+      "quantity": 1,
+      "id": "8f0e0219-aeb5-430f-a114-04189d54f95e"
+    },
+    {
+      "name": "Cat food",
+      "category": "cat",
+      "description": "cat meal",
+      "price": 15,
+      "imageSrc": "https://headsupfortails.com/cdn/shop/products/cattreatAnchoviescrunchies.jpg?v=1655703606&width=1100",
+      "quantity": 1,
+      "id": "d261e153-5dbd-49e2-afbd-9419730e0fa9"
+    },
+    {
+      "name": "Puppy food",
+      "category": "dog",
+      "description": "dog meal",
+      "price": "350",
+      "imageSrc": "https://headsupfortails.com/cdn/shop/files/PedigreeChicken_LiverChunksinGravywithVegetablesWetPuppyFood-70g_4a3f79e6-85b6-4c4a-8070-6256a5bbc8ff.jpg?v=1692165398&width=1100",
+      "quantity": 1,
+      "id": "9447a46f-1763-42bf-b78f-3f730ce17131"
+    }
+  ]
+}

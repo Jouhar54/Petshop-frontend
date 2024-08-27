@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "userName": "jou",
+      "email": "jouharvaramangalath786@gmail.com",
+      "password": "`12345",
+      "id": "123"
+    },
+    {
+      "userName": "user",
+      "email": "kjh@hjg.com",
+      "password": "`12345",
+      "id": "c380f6fc-43b5-4ea3-a1d2-9e9959864f51"
+    },
+    {
+      "userName": "User",
+      "email": "new@gmail.com",
+      "password": "`12345",
+      "id": "ab8fb9f3-64cf-41e0-bccb-9e86369a7ad9"
+    },
+    {
+      "userName": "muhammed shibly ",
+      "email": "kshibili26075@gmail.com",
+      "password": "hai hello ok kanmani",
+      "id": "c1eafd6b-edd0-4d8b-85fe-c23f4601589c"
+    }
+  ]
+}

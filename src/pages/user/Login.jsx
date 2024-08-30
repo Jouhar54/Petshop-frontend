@@ -2,12 +2,11 @@ import {useState } from "react";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/axiosIntersepter";
 
 export function Login() {
   const navigate = useNavigate();
   const [action, setAction] = useState('Login');
-  const baseUrl = import.meta.env.VITE_USER_API;
 
   const handleAction = () => {
     setAction('Sign up');
@@ -36,7 +35,7 @@ export function Login() {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       if (action === 'Sign up') {
-        axios.post(`${baseUrl}users/register`, values)
+        api.post(`users/register`, values)
           .then((res) => {
             console.log('Signed up successfully:', res.data);
             alert('Signed up successfully');
@@ -47,9 +46,10 @@ export function Login() {
             alert('Failed to sign up');
           });
       } else {
-        axios.post(`${baseUrl}users/login`, { email: values.email, password: values.password })
+        api.post(`users/login`, { email: values.email, password: values.password })
           .then((res) => {
-              localStorage.setItem('userData', JSON.stringify(res.data.data));
+              localStorage.setItem('userData',res.data.data._id);
+              localStorage.setItem('accessToken',res.data.accessToken);
               console.log(res.data);
               navigate("/")
           })

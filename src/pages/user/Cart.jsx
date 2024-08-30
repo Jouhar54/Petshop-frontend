@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Popup from '../../Components/checkout';
@@ -25,9 +25,6 @@ export function Cart() {
     setIsPopupVisible(false);
   };
 
-  //console.log(cart);
-  
-console.log(cart.map(product => product.id));
   return (
     <>
       <Transition show={open}>
@@ -76,7 +73,7 @@ console.log(cart.map(product => product.id));
                           <div className="flow-root">
                             <ul role="list" className="-my-6 divide-y divide-gray-200">
                               {cart.map((product) => (
-                                <li key={product.id} className="flex py-6">
+                                <li key={product._id} className="flex py-6">
                                   <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                     <img
                                       src={product.imageSrc}
@@ -89,11 +86,11 @@ console.log(cart.map(product => product.id));
                                     <div>
                                       <div className="flex justify-between text-base font-medium text-gray-900">
                                         <h3>
-                                          <a href={product.href}>{product.name}</a>
+                                          <a href={product.href}>{product.title}</a>
                                         </h3>
                                         <p className="ml-4">${product.price * product.quantity}</p>
                                       </div>
-                                      <p className="mt-1 text-sm text-gray-500">{product.color}</p>
+                                      <p className="mt-1 text-sm text-gray-500">{product.category}</p>
                                     </div>
                                     <div className="flex flex-1 items-end justify-between text-sm">
                                       <div className="flex items-center space-x-2">

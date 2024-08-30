@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { useNavigate } from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
 import { addToCart } from '../../slices/cartSlice';
@@ -6,22 +6,19 @@ import { addToCart } from '../../slices/cartSlice';
 export const SingleProduct = ({ product }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const cart = useSelector((state) => state.cart)
+    // const cart = useSelector((state) => state.cart)
+    // console.log(cart);
 
     const handleNavigate = () => {
-        navigate(`/products/${product.id}`);
+        navigate(`/products/${product._id}`);
     };
 
     return (
 
-        <div key={product.id} >
+        <div key={product._id} >
             <div onClick={()=>handleNavigate} className="cursor-pointer">
             <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-                <img
-                    src={product.imageSrc}
-                    alt={product.imageAlt}
-                    className="h-full w-full object-cover object-center lg:h-full lg:w-full"
-                />
+               <p>image</p>
             </div>
                     </div>
             <div className="mt-4 flex justify-between">
@@ -29,7 +26,7 @@ export const SingleProduct = ({ product }) => {
                     <h3 className="text-sm text-gray-700">
                         <p >
                             <span aria-hidden="true" />
-                            {product.name}
+                            {product.title}
                         </p>
                     </h3>
                     <p className="mt-1 text-sm text-gray-500">{product.category}</p>

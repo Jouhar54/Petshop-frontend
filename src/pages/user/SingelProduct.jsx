@@ -1,13 +1,11 @@
 
 import { useNavigate } from 'react-router-dom'
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import { addToCart } from '../../slices/cartSlice';
 
 export const SingleProduct = ({ product }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    // const cart = useSelector((state) => state.cart)
-    // console.log(cart);
 
     const handleNavigate = () => {
         navigate(`/products/${product._id}`);

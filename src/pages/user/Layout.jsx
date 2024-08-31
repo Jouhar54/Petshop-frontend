@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import {
   Dialog,
   DialogPanel,
@@ -10,14 +10,14 @@ import {
 } from '@heroicons/react/24/outline'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { Cart } from './Cart'
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 
 
 export function Layout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const navigate = useNavigate();
-  const cart = useSelector((state) => state.cart)
+  // const {items} = useSelector((state) => state.cart)
 
   const logedUser = localStorage.getItem('userData');
   const logo = "https://img.freepik.com/free-vector/abstract-bone-icon-logo-design_474888-2853.jpg";
@@ -62,11 +62,11 @@ export function Layout() {
 
           </PopoverGroup>
 
-          {/* handling the cart  */}
+          {/* handling the cart Icon */}
           <div className=" hidden lg:flex lg:flex-1 lg:justify-center " >
             <button className="relative py-2" onClick={handleShowCart}>
               <div className="t-0 absolute left-3">
-                <p className="flex h-2 w-2 items-center justify-center rounded-full bg-red-500 p-3 text-xs text-white">{cart.length}</p>
+                <p className="flex h-2 w-2 items-center justify-center rounded-full bg-red-500 p-3 text-xs text-white">{0}</p>
               </div>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="file: mt-4 h-6 w-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
@@ -84,7 +84,7 @@ export function Layout() {
           ) : (
             <div className="hidden lg:flex lg:flex-1 lg:justify-end">
               <Link to='/login' className="text-sm font-semibold leading-6 text-gray-900">
-                Log in 
+                Log in
               </Link>
             </div>
           )}
@@ -104,12 +104,12 @@ export function Layout() {
                 <XMarkIcon className="h-6 w-6" aria-hidden="true" />
               </button>
             </div>
-            
+
             <div className="mt-6 flow-root">
               <div className="-my-6 divide-y divide-gray-500/10">
                 <div className="space-y-2 py-6">
 
-                  
+
                   <Link to='/'
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                     Home
@@ -121,7 +121,7 @@ export function Layout() {
                   <Link to='/cart'
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                     Cart
-                    
+
                   </Link>
                 </div>
               </div>
@@ -209,9 +209,9 @@ export function Layout() {
                     viewBox="0 0 24 24"
                     aria-hidden="true"
                   >
-                    <path 
+                    <path
                     // d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"
-                     />
+                    />
                   </svg>
                 </a>
               </li>
@@ -422,7 +422,7 @@ export function Layout() {
             &copy; 2021 Kazpix.in All rights reserved.
           </p>
         </div>
-      </footer>
+      </footer>
     </>
   )
 }

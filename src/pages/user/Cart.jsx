@@ -1,20 +1,35 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Popup from '../../Components/checkout';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateQuantity, removeProduct } from '../../slices/cartSlice';
-
+import { updateQuantity, removeProduct, fetchCart } from '../../slices/cartSlice';
 
 export function Cart() {
   const [open, setOpen] = useState(true);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const cart = useSelector((state) => state.cart)
   const dispatch = useDispatch();
+  const { items=[], status, error } = useSelector(state => state.cart);
+
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchCart());
+    }
+  }, [status, dispatch]);
 
   const total = useMemo(() => {
-    return cart.reduce((sum, product) => sum + product.price * product.quantity, 0);
-  }, [cart]);
+    return items.reduce((sum, product) => sum + product._id.price * product.quantity, 0);
+  }, [items]);
+
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+
+  if (status === 'failed') {
+    return <div>Error: {error}</div>;
+  }
+
+  console.log(items[0]);
 
   const handleCheckout = () => {
     setOpen(false);
@@ -72,8 +87,8 @@ export function Cart() {
                         <div className="mt-8">
                           <div className="flow-root">
                             <ul role="list" className="-my-6 divide-y divide-gray-200">
-                              {cart.map((product) => (
-                                <li key={product._id} className="flex py-6">
+                              {items.map((product, index) => (
+                                <li key={`${product._id}-${index}`} className="flex py-6">
                                   <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                     <img
                                       src={product.imageSrc}
@@ -86,18 +101,18 @@ export function Cart() {
                                     <div>
                                       <div className="flex justify-between text-base font-medium text-gray-900">
                                         <h3>
-                                          <a href={product.href}>{product.title}</a>
+                                          <a href={product.href}>{product._id.title}</a>
                                         </h3>
-                                        <p className="ml-4">${product.price * product.quantity}</p>
+                                        <p className="ml-4">${product._id.price * product.quantity}</p>
                                       </div>
-                                      <p className="mt-1 text-sm text-gray-500">{product.category}</p>
+                                      <p className="mt-1 text-sm text-gray-500">{product._id.category}</p>
                                     </div>
                                     <div className="flex flex-1 items-end justify-between text-sm">
                                       <div className="flex items-center space-x-2">
                                         <button
                                           type="button"
                                           className="text-gray-500 p-1"
-                                          onClick={() => dispatch(updateQuantity({id:product.id, quantity:product.quantity >= 1 ? product.quantity - 1 : 0}))}
+                                          onClick={() => dispatch(updateQuantity({ id: product._id._id, quantity: product.quantity >= 1 ? product.quantity - 1 : 0 }))}
                                         >
                                           -
                                         </button>
@@ -105,7 +120,7 @@ export function Cart() {
                                         <button
                                           type="button"
                                           className="text-gray-500 p-1"
-                                          onClick={() => dispatch(updateQuantity({id:product.id, quantity:product.quantity + 1}))}
+                                          onClick={() => dispatch(updateQuantity({ id: product._id._id, quantity: product.quantity + 1 }))}
                                         >
                                           +
                                         </button>
@@ -115,7 +130,7 @@ export function Cart() {
                                         <button
                                           type="button"
                                           className="font-medium text-indigo-600 hover:text-indigo-500"
-                                          onClick={() => dispatch(removeProduct(product.id))}
+                                          onClick={() => dispatch(removeProduct(product._id._id))}
                                         >
                                           Remove
                                         </button>
@@ -130,7 +145,7 @@ export function Cart() {
                         </div>
                       </div>
 
-                      {cart.length > 0 ? (
+                      {items.length > 0 ? (
                         <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                           <div className="flex justify-between text-base font-medium text-gray-900">
                             <p>Subtotal</p>

@@ -37,8 +37,8 @@ const cartSlice = createSlice({
     },
 
     removeProduct:(state, action)=>{
-      // return state.items.filter(item=> item._id._id == action.payload._id)
-      api.delete(`/users/${userId}/cart`, action.payload)
+      state.items = state.items.filter(item=> item._id._id !== action.payload)
+      api.delete(`/users/${userId}/cart`, { data: { _id: action.payload } });
     } ,
   },
 

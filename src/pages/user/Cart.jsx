@@ -29,8 +29,6 @@ export function Cart() {
     return <div>Error: {error}</div>;
   }
 
-  console.log(items[0]);
-
   const handleCheckout = () => {
     setOpen(false);
     setIsPopupVisible(true);

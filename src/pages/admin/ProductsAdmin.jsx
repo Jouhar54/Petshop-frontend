@@ -1,11 +1,13 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { fetchProducts } from "../../slices/productSlice";
+import { useDispatch, useSelector } from "react-redux";
+import api from "../../utils/axiosIntersepter";
 
 export default function ProductsAdmin() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch()
+  const { items=[], status, error } = useSelector(state => state.products);
   const [showAdd, setShowAdd] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null); // State to hold product being edited
   const [editFormData, setEditFormData] = useState({
@@ -16,21 +18,23 @@ export default function ProductsAdmin() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("http://localhost:8002/products")
-      .then((response) => {
-        setProducts(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message);
-        setLoading(false);
-      });
-  }, []);
+    if (status === 'idle') {
+      dispatch(fetchProducts());
+    }
+  }, [status, dispatch, items]);
+
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+
+  if (status === 'failed') {
+    return <div>Error: {error}</div>;
+  }
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:8002/products/${id}`)
+    api.delete(`http://localhost:8002/products/${id}`)
       .then(() => {
-        setProducts(products.filter(product => product.id !== id));
+        // setProducts(products.filter(product => product.id !== id));
       })
       .catch((error) => {
         console.error("There was an error deleting the user!", error);
@@ -57,10 +61,9 @@ export default function ProductsAdmin() {
     axios.put(`http://localhost:8002/products/${editingProduct.id}`, updatedProduct)
       .then((response) => {
         // Update local state with updated product
-        const updatedProducts = products.map(product =>
-          product.id === response.data.id ? response.data : product
+        const updatedProducts = items.map(product =>
+          product._id._id === response.data.id ? response.data : product
         );
-        setProducts(updatedProducts);
         setEditingProduct(null);
       })
       .catch((error) => {
@@ -68,11 +71,13 @@ export default function ProductsAdmin() {
       });
   };
 
+  console.log(items);
+
   return (
     <>
     <ul role="list" className="divide-y divide-gray-300 ml-10">
-      {products.map((product) => (
-        <li key={product.id} className="flex justify-between gap-x-6 py-5">
+      {items.map((product) => (
+        <li key={product._id} className="flex justify-between gap-x-6 py-5">
           <div className="flex min-w-0 gap-x-4">
             <img className="h-12 w-12 flex-none rounded-sm bg-gray-50" src={product.imageSrc} alt={product.imageAlt} />
             <div className="min-w-0 flex-auto">

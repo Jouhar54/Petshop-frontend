@@ -1,7 +1,7 @@
-import axios from 'axios';
-import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import api from '../../utils/axiosIntersepter';
+import { useState } from 'react';
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -13,34 +13,44 @@ const validationSchema = Yup.object({
 });
 
 const AddNewProduct = () => {
+  const [error, setError] = useState(null); // To hold error messages
 
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
-    const regObj = {
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    const newProduct = {
       ...values,
       price: Number(values.price),
       quantity: 1,
     };
 
-    axios.post("http://localhost:8002/products", JSON.stringify(regObj), {
-      headers: {
-        "Content-Type": "application/json",
-      }
-    })
-      .then((res) => {
-        console.log('Success');
-        setSubmitting(false);
-        resetForm();
-      }).catch((err) => {
-        console.log(`Failed ${err.message}`);
-        setSubmitting(false);
+    try {
+      await api.post("/admin/products", newProduct, {
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+      console.log('Product added successfully');
+      resetForm();
+    } catch (err) {
+      setError(`Failed to add product: ${err.message}`);
+      console.log(`Failed ${err.message}`);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
     <div className="max-w-max mx-10 mt-3 p-5 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6">Add New Product</h2>
+      {error && <div className="text-red-500 mb-4">{error}</div>}
       <Formik
-        initialValues={{ name: '', category: '', description: '', price: '', imageSrc: '' }}
+        initialValues={
+          {
+            name: '',
+            category: '',
+            description: '',
+            price: '',
+            imageSrc: ''
+          }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >

@@ -1,23 +1,28 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts } from '../../slices/productSlice';
 
 const AdminHandle = () => {
   const [category, setCategory] = useState("cat");
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch()
+  const { items=[], status, error } = useSelector(state => state.products);
 
+  
   useEffect(() => {
-    axios.get("http://localhost:8002/products")
-      .then((response) => {
-        setProducts(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message);
-        setLoading(false);
-      });
-  }, []);
+    if (status === 'idle') {
+      dispatch(fetchProducts());
+      setProducts(items);
+    }
+  }, [status, dispatch, items]);
+
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+
+  if (status === 'failed') {
+    return <div>Error: {error}</div>;
+  }
 
   const filteredProducts = products.filter((product) => product.category === category);
 

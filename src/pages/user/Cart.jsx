@@ -89,8 +89,8 @@ export function Cart() {
                                 <li key={`${product._id}-${index}`} className="flex py-6">
                                   <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                     <img
-                                      src={product.imageSrc}
-                                      alt={product.imageAlt}
+                                      src={product._id.imageSrc}
+                                      alt={product._id.imageAlt}
                                       className="h-full w-full object-cover object-center"
                                     />
                                   </div>
@@ -99,7 +99,7 @@ export function Cart() {
                                     <div>
                                       <div className="flex justify-between text-base font-medium text-gray-900">
                                         <h3>
-                                          <a href={product.href}>{product._id.title}</a>
+                                          <a href={product.href}>{product._id.name}</a>
                                         </h3>
                                         <p className="ml-4">${product._id.price * product.quantity}</p>
                                       </div>

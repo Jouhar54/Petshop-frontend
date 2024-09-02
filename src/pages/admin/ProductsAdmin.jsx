@@ -1,15 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchProducts } from "../../slices/productSlice";
+import { deleteProduct, editProduct, fetchProducts } from "../../slices/productSlice";
 import { useDispatch, useSelector } from "react-redux";
 import api from "../../utils/axiosIntersepter";
 
 export default function ProductsAdmin() {
   const dispatch = useDispatch()
   const { items=[], status, error } = useSelector(state => state.products);
-  const [showAdd, setShowAdd] = useState(null);
-  const [editingProduct, setEditingProduct] = useState(null); // State to hold product being edited
+  const [editingProduct, setEditingProduct] = useState(null);
   const [editFormData, setEditFormData] = useState({
     name: "",
     category: "",
@@ -31,16 +30,6 @@ export default function ProductsAdmin() {
     return <div>Error: {error}</div>;
   }
 
-  const handleDelete = (id) => {
-    api.delete(`http://localhost:8002/products/${id}`)
-      .then(() => {
-        // setProducts(products.filter(product => product.id !== id));
-      })
-      .catch((error) => {
-        console.error("There was an error deleting the user!", error);
-      });
-  };
-
   const handleModify = (product) => {
     setEditingProduct(product);
     setEditFormData({
@@ -57,21 +46,8 @@ export default function ProductsAdmin() {
       category: editFormData.category,
       price: editFormData.price,
     };
-
-    axios.put(`http://localhost:8002/products/${editingProduct.id}`, updatedProduct)
-      .then((response) => {
-        // Update local state with updated product
-        const updatedProducts = items.map(product =>
-          product._id._id === response.data.id ? response.data : product
-        );
-        setEditingProduct(null);
-      })
-      .catch((error) => {
-        console.error("Failed to update product:", error);
-      });
+    dispatch(editProduct({updatedProduct, _id:editingProduct._id}))
   };
-
-  console.log(items);
 
   return (
     <>
@@ -85,7 +61,7 @@ export default function ProductsAdmin() {
               <p className="mt-1 truncate text-xs leading-5 text-gray-500">{product.category}</p>
             </div>
           </div>
-            <button onClick={()=>handleDelete(product.id)}
+            <button onClick={()=>dispatch(deleteProduct({id:product._id}))}
               className="bg-red-500 hover:bg-red-700 text-white px-2 h-8 rounded-md "
               >Delete</button>
             <button onClick={() => handleModify(product)} 
@@ -124,7 +100,7 @@ export default function ProductsAdmin() {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="price" classprice="block text-sm font-medium text-gray-700">price</label>
+                <label htmlFor="price" className="block text-sm font-medium text-gray-700">price</label>
                 <input
                   id="price"
                   type="text"

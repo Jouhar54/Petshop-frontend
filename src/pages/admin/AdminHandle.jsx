@@ -4,15 +4,12 @@ import { fetchProducts } from '../../slices/productSlice';
 
 const AdminHandle = () => {
   const [category, setCategory] = useState("cat");
-  const [products, setProducts] = useState([]);
   const dispatch = useDispatch()
   const { items=[], status, error } = useSelector(state => state.products);
 
-  
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchProducts());
-      setProducts(items);
     }
   }, [status, dispatch, items]);
 
@@ -24,7 +21,7 @@ const AdminHandle = () => {
     return <div>Error: {error}</div>;
   }
 
-  const filteredProducts = products.filter((product) => product.category === category);
+  const filteredProducts = items.filter((product) => product.category === category);
 
   return (
     <>
@@ -44,7 +41,7 @@ const AdminHandle = () => {
   </div>
   <ul role="list" className="divide-y divide-gray-300 ml-10">
       {filteredProducts.map((product) => (
-        <li key={product.id} className="flex justify-between gap-x-6 py-5">
+        <li key={product._id} className="flex justify-between gap-x-6 py-5">
           <div className="flex min-w-0 gap-x-4">
             <img className="h-12 w-12 flex-none rounded-sm bg-gray-50" src={product.imageSrc} alt={product.imageAlt} />
               <p className="text-sm font-semibold leading-6 text-gray-900">{product.name}</p>

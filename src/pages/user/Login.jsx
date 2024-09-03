@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from "react-router-dom";
 import api from "../../utils/axiosIntersepter";
+import toast, { Toaster } from 'react-hot-toast';
 
 export function Login() {
   const navigate = useNavigate();
@@ -38,20 +39,26 @@ export function Login() {
         api.post(`users/register`, values)
           .then((res) => {
             console.log('Signed up successfully:', res.data);
-            alert('Signed up successfully');
-            navigate("/login");
+            toast.success('Signed up successfully');
+            setAction('login')
           })
           .catch((err) => {
             console.error('Failed to sign up:', err.message);
-            alert('Failed to sign up');
+            toast.error('Failed to sign up');
           });
       } else {
         api.post(`users/login`, { email: values.email, password: values.password })
           .then((res) => {
-              localStorage.setItem('userData',res.data.data._id);
+              localStorage.setItem('userId',res.data.data._id);
               localStorage.setItem('accessToken',res.data.accessToken);
               console.log(res.data);
               navigate("/")
+              toast.success(`Logged in successfully`)
+              if(res.data.data.email === 'admin@gmail.com'){
+                navigate('/admin')
+              }
+          }).catch((err)=>{
+            toast.error(`Create a new account: ${err.message}`);
           })
       }
     },
@@ -59,6 +66,7 @@ export function Login() {
 
   return (
     <>
+    <Toaster />
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">

@@ -2,6 +2,8 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import api from '../../utils/axiosIntersepter';
 import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -14,6 +16,7 @@ const validationSchema = Yup.object({
 
 const AddNewProduct = () => {
   const [error, setError] = useState(null); // To hold error messages
+  const notify = () => toast.success('Product Added');
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     const newProduct = {
@@ -108,11 +111,13 @@ const AddNewProduct = () => {
             </div>
             <button
               type="submit"
+              onClick={notify}
               disabled={isSubmitting}
               className="w-full px-4 py-2 bg-indigo-600 text-white font-medium text-sm leading-5 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               {isSubmitting ? 'Submitting...' : 'Add Product'}
             </button>
+            <Toaster />
           </Form>
         )}
       </Formik>

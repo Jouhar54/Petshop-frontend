@@ -1,9 +1,7 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteProduct, editProduct, fetchProducts } from "../../slices/productSlice";
 import { useDispatch, useSelector } from "react-redux";
-import api from "../../utils/axiosIntersepter";
 
 export default function ProductsAdmin() {
   const dispatch = useDispatch()

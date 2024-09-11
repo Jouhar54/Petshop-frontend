@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import Popup from '../../Components/checkout';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateQuantity, removeProduct, fetchCart } from '../../slices/cartSlice';
 import api from '../../utils/axiosIntersepter';
@@ -9,7 +8,6 @@ const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY
 
 export function Cart() {
   const [open, setOpen] = useState(true);
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
   const dispatch = useDispatch();
   const { items=[], status, error } = useSelector(state => state.cart);
   const email = localStorage.getItem('email')
@@ -48,27 +46,11 @@ export function Cart() {
   
       const stripe = window.Stripe(stripePublicKey);
       const { id } = response.data;
-      const result = await stripe.redirectToCheckout({ sessionId: id });
-  
-      if (result.error) {
-        console.error('Error during checkout:', result.error.message);
-      } else {
-        await api.post('/create-order', {
-          cartItems: items,
-          userId,
-        });
-  
-        dispatch(fetchCart());
-        setIsPopupVisible(true);
-      }
+      await stripe.redirectToCheckout({ sessionId: id });
 
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const handleClosePopup = () => {
-    setIsPopupVisible(false);
   };
 
   return (
@@ -215,12 +197,6 @@ export function Cart() {
           </div>
         </Dialog>
       </Transition>
-      {isPopupVisible && (
-        <Popup
-          message="Thank you, order placed successfully"
-          onClose={handleClosePopup}
-        />
-      )}
     </>
   )
 }

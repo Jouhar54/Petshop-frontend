@@ -11,6 +11,7 @@ import AddNewProduct from './pages/admin/AddNewProduct'
 import AdminLayout from './pages/admin/adminLayout'
 import { Cart } from './pages/user/Cart'
 import ProtectRouter from './utils/protectRoute'
+import Success from './Components/success'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path='/cart' element={<Cart />} />
           <Route path='/products' element={<Products />} />
           <Route path='/products/:id' element={<Products />} />
+          <Route path='/success' element={<Success />} />
         </Route>
         <Route path='/login' element={<Login />} />
 

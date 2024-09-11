@@ -1,4 +1,4 @@
-import {useState } from "react";
+import { useState } from "react";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from "react-router-dom";
@@ -49,15 +49,17 @@ export function Login() {
       } else {
         api.post(`users/login`, { email: values.email, password: values.password })
           .then((res) => {
-              localStorage.setItem('userId',res.data.data._id);
-              localStorage.setItem('accessToken',res.data.accessToken);
-              console.log(res.data);
-              navigate("/")
-              toast.success(`Logged in successfully`)
-              if(res.data.data.email === 'admin@gmail.com'){
-                navigate('/admin')
-              }
-          }).catch((err)=>{
+            localStorage.setItem('userId', res.data.data._id);
+            localStorage.setItem('accessToken', res.data.accessToken);
+            localStorage.setItem('email', res.data.data.email);
+            console.log(res.data);
+            navigate("/")
+            toast.success(`Logged in successfully`)
+            // window.location.reload();
+            if (res.data.data.email === 'admin@gmail.com') {
+              navigate('/admin')
+            }
+          }).catch((err) => {
             toast.error(`Create a new account: ${err.message}`);
           })
       }
@@ -66,7 +68,7 @@ export function Login() {
 
   return (
     <>
-    <Toaster />
+      <Toaster />
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">

@@ -31,7 +31,9 @@ export function Layout() {
     localStorage.removeItem('userId');
     localStorage.removeItem('accessToken');
     navigate('/login');
+    window.location.reload();
   };
+  
   return (
     <>
       <header className="bg-white ">

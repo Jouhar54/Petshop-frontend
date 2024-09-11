@@ -12,12 +12,16 @@ import {
     PowerIcon,
   } from "@heroicons/react/24/solid";
 import { Link,  Outlet, useNavigate } from "react-router-dom";
-import { useState } from "react";
-
-  
    
   export default function AdminLayout() {
     const navigate = useNavigate();
+
+    const handleLogout = ()=>{
+      localStorage.removeItem('userData');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('email');
+      navigate('/login')
+    }
   
     return (
       <div className="flex h-screen">
@@ -60,10 +64,7 @@ import { useState } from "react";
             <ListItemPrefix>
               <PowerIcon className="h-5 w-5" />
             </ListItemPrefix>
-            <button onClick={()=>{
-              localStorage.removeItem('userData');
-              navigate('/login')
-            }}>Log Out</button>
+            <button onClick={handleLogout}>Log Out</button>
           </ListItem>
         </List>
       </Card>

@@ -10,6 +10,7 @@ import AdminHandle from './pages/admin/AdminHandle'
 import AddNewProduct from './pages/admin/AddNewProduct'
 import AdminLayout from './pages/admin/adminLayout'
 import { Cart } from './pages/user/Cart'
+import ProtectRouter from './utils/protectRoute'
 
 function App() {
   return (
@@ -23,11 +24,13 @@ function App() {
         </Route>
         <Route path='/login' element={<Login />} />
 
-        <Route path='/admin' element={<AdminLayout />}>
-          <Route path='/admin' element={<AdminHandle />} />
-          <Route path='/admin/addProduct' element={<AddNewProduct />} />
-          <Route path='/admin/usersAdmin' element={<UsersAdmin />} />
-          <Route path='/admin/productsAdmin' element={<ProductsAdmin />} />
+        <Route element={<ProtectRouter />}>
+          <Route path='/admin' element={<AdminLayout />}>
+            <Route path='/admin' element={<AdminHandle />} />
+            <Route path='/admin/addProduct' element={<AddNewProduct />} />
+            <Route path='/admin/usersAdmin' element={<UsersAdmin />} />
+            <Route path='/admin/productsAdmin' element={<ProductsAdmin />} />
+          </Route>
         </Route>
 
       </Routes>

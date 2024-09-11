@@ -4,12 +4,16 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import Popup from '../../Components/checkout';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateQuantity, removeProduct, fetchCart } from '../../slices/cartSlice';
+import api from '../../utils/axiosIntersepter';
+const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY
 
 export function Cart() {
   const [open, setOpen] = useState(true);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const dispatch = useDispatch();
   const { items=[], status, error } = useSelector(state => state.cart);
+  const email = localStorage.getItem('email')
+  const userId = localStorage.getItem('userId')
 
   useEffect(() => {
     if (status === 'idle') {
@@ -29,9 +33,38 @@ export function Cart() {
     return <div>Error: {error}</div>;
   }
 
-  const handleCheckout = () => {
-    setOpen(false);
-    setIsPopupVisible(true);
+  const handleCheckout = async () => {
+    try {
+      const response = await api.post('/users/create-checkout-session', {
+        cartItems: items.map(item => ({
+          name: item._id.name,
+          imageSrc: item._id.imageSrc,
+          price: item._id.price,
+          quantity: item.quantity,
+        })),
+        email,
+        userId
+      });
+  
+      const stripe = window.Stripe(stripePublicKey);
+      const { id } = response.data;
+      const result = await stripe.redirectToCheckout({ sessionId: id });
+  
+      if (result.error) {
+        console.error('Error during checkout:', result.error.message);
+      } else {
+        await api.post('/create-order', {
+          cartItems: items,
+          userId,
+        });
+  
+        dispatch(fetchCart());
+        setIsPopupVisible(true);
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleClosePopup = () => {

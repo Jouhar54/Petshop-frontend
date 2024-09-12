@@ -12,6 +12,8 @@ import AdminLayout from './pages/admin/adminLayout'
 import { Cart } from './pages/user/Cart'
 import ProtectRouter from './utils/protectRoute'
 import Success from './Components/success'
+import OrdersPage from './pages/user/Orders'
+import UserProtectRouter from './utils/UserProtect'
 
 function App() {
   return (
@@ -19,10 +21,12 @@ function App() {
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route path='/' element={<Home />} />
-          <Route path='/cart' element={<Cart />} />
           <Route path='/products' element={<Products />} />
-          <Route path='/products/:id' element={<Products />} />
-          <Route path='/success' element={<Success />} />
+          <Route element={<UserProtectRouter />}>
+            <Route path='/cart' element={<Cart />} />
+            <Route path='/success' element={<Success />} />
+            <Route path='/orders' element={<OrdersPage />} />
+          </Route>
         </Route>
         <Route path='/login' element={<Login />} />
 

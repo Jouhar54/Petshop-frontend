@@ -2,6 +2,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { addToCart } from '../../slices/cartSlice';
+import toast, { Toaster } from 'react-hot-toast';
 
 export const SingleProduct = ({ product }) => {
     const navigate = useNavigate();
@@ -11,9 +12,15 @@ export const SingleProduct = ({ product }) => {
         navigate(`/products/${product._id}`);
     };
 
+    const handleAddToCart = () => {
+        dispatch(addToCart(product));
+        toast.success(`${product.name} added to cart!`); // Show success toast
+    };
+
     return (
 
         <div key={product._id} className="bg-white shadow-md rounded-lg overflow-hidden group">
+            <Toaster />
             <div
                 onClick={handleNavigate}
                 className="relative cursor-pointer hover:scale-105 transition-transform duration-300"
@@ -39,7 +46,7 @@ export const SingleProduct = ({ product }) => {
 
                 <button
                     className="mt-4 w-full bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-semibold leading-6 hover:bg-red-500 transition-colors duration-300"
-                    onClick={() => dispatch(addToCart(product))}
+                    onClick={handleAddToCart}
                 >
                     Add to Cart
                 </button>

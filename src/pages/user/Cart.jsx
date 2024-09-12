@@ -54,7 +54,7 @@ export function Cart() {
   return (
     <>
       <Transition show={open}>
-        <Dialog className="relative z-10" onClose={setOpen}>
+        <Dialog className="relative z-50" onClose={setOpen}>
           <TransitionChild
             enter="ease-in-out duration-500"
             enterFrom="opacity-0"

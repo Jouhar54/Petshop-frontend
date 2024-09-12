@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../utils/axiosIntersepter";
 
-const userId = localStorage.getItem("userId");
 
 export const fetchCart = createAsyncThunk("cart/fetchCart", async () => {
+  const userId = localStorage.getItem("userId");
   try {
     const response = await api.get(`users/${userId}/cart`);
     return response.data.data;
@@ -30,6 +30,7 @@ const cartSlice = createSlice({
       } else {
         state.items.push(action.payload);
       }
+      const userId = localStorage.getItem("userId");
       api.post(`/users/${userId}/cart`, action.payload);
     },
 
@@ -46,6 +47,7 @@ const cartSlice = createSlice({
       state.items = state.items.filter(
         (item) => item._id._id !== action.payload
       );
+      const userId = localStorage.getItem("userId");
       api.delete(`/users/${userId}/cart`, { data: { _id: action.payload } });
     },
   },

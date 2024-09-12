@@ -1,6 +1,16 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { fetchCart } from '../../slices/cartSlice';
+import { useDispatch } from 'react-redux';
 
 export function Home() {
+  const dispatch = useDispatch();
+  
+
+  useEffect(() => {
+    dispatch(fetchCart());
+  }, [dispatch]);
+
   return (
     <div className="relative overflow-hidden bg-white">
       <div className="pb-16 pt-12 sm:pb-20 sm:pt-16 lg:pb-28 lg:pt-32">

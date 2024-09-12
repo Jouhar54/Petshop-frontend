@@ -60,7 +60,8 @@ export function Login() {
               navigate('/admin')
             }
           }).catch((err) => {
-            toast.error(`Create a new account: ${err.message}`);
+            toast.error(`Create a new account`);
+            console.log(err.message);
           })
       }
     },

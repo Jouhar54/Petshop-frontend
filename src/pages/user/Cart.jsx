@@ -14,10 +14,8 @@ export function Cart() {
   const userId = localStorage.getItem('userId')
 
   useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchCart());
-    }
-  }, [status, dispatch]);
+    dispatch(fetchCart());
+  }, [dispatch]);
 
   const total = useMemo(() => {
     return items.reduce((sum, product) => sum + product._id.price * product.quantity, 0);

@@ -13,30 +13,38 @@ export const SingleProduct = ({ product }) => {
 
     return (
 
-        <div key={product._id} >
-            <div onClick={() => handleNavigate} className="cursor-pointer">
-                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-                    <img src={product.imageSrc} alt="Product Image" />
+        <div key={product._id} className="bg-white shadow-md rounded-lg overflow-hidden group">
+            <div
+                onClick={handleNavigate}
+                className="relative cursor-pointer hover:scale-105 transition-transform duration-300"
+            >
+                <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-gray-200">
+                    <img
+                        src={product.imageSrc}
+                        alt="Product Image"
+                        className="object-cover object-center w-full h-full rounded-t-lg"
+                    />
+                </div>
+                <div className="absolute top-2 right-2 bg-white px-2 py-1 text-xs font-semibold text-indigo-600 rounded-md shadow">
+                    New
                 </div>
             </div>
-            <div className="mt-4 flex justify-between">
-                <div>
-                    <h3 className="text-sm text-gray-700">
-                        <p >
-                            <span aria-hidden="true" />
-                            {product.name}
-                        </p>
-                    </h3>
-                    <p className="mt-1 text-sm text-gray-500">{product.category}</p>
-                </div>
 
-                <div>
-                    <p className="text-sm font-medium text-gray-900">{product.price}</p>
+            <div className="p-4">
+                <h3 className="text-md font-semibold text-gray-900 truncate">
+                    <p>{product.name}</p>
+                </h3>
+                <p className="text-sm text-gray-500">{product.category}</p>
+                <p className="text-lg font-bold text-gray-900 mt-2">$ {product.price}</p>
 
-                    <button className="text-sm font-semibold leading-6 text-indigo-600 hover:text-red-500"
-                        onClick={() => dispatch(addToCart(product))} >Add</button>
-                </div>
+                <button
+                    className="mt-4 w-full bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-semibold leading-6 hover:bg-red-500 transition-colors duration-300"
+                    onClick={() => dispatch(addToCart(product))}
+                >
+                    Add to Cart
+                </button>
             </div>
         </div>
+
     )
 }

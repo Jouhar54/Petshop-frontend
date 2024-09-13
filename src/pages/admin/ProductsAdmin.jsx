@@ -4,27 +4,29 @@ import { deleteProduct, editProduct, fetchProducts } from "../../slices/productS
 import { useDispatch, useSelector } from "react-redux";
 
 export default function ProductsAdmin() {
-  const dispatch = useDispatch()
-  const { items = [], status, error } = useSelector(state => state.products);
+  const dispatch = useDispatch();
+  const { items = [], status, error } = useSelector((state) => state.products);
   const [editingProduct, setEditingProduct] = useState(null);
   const [editFormData, setEditFormData] = useState({
     name: "",
     category: "",
     price: "",
   });
+  const [deleteProductId, setDeleteProductId] = useState(null); // To track the product to be deleted
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // To show or hide the delete modal
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (status === 'idle') {
+    if (status === "idle") {
       dispatch(fetchProducts());
     }
-  }, [status, dispatch, items]);
+  }, [status, dispatch]);
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return <div>Loading...</div>;
   }
 
-  if (status === 'failed') {
+  if (status === "failed") {
     return <div>Error: {error}</div>;
   }
 
@@ -44,14 +46,26 @@ export default function ProductsAdmin() {
       category: editFormData.category,
       price: editFormData.price,
     };
-    dispatch(editProduct({ updatedProduct, _id: editingProduct._id }))
+    dispatch(editProduct({ updatedProduct, _id: editingProduct._id }));
     dispatch(fetchProducts());
     setEditingProduct(null);
   };
 
-  const handleDeleteProduct = (productId) => {
-    dispatch(deleteProduct({ id: productId }))
+  const handleDeleteProduct = () => {
+    dispatch(deleteProduct({ id: deleteProductId }));
     dispatch(fetchProducts());
+    setShowDeleteModal(false);
+    setDeleteProductId(null);
+  };
+
+  const openDeleteModal = (productId) => {
+    setDeleteProductId(productId);
+    setShowDeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+    setDeleteProductId(null);
   };
 
   return (
@@ -66,13 +80,18 @@ export default function ProductsAdmin() {
                 <p className="mt-1 truncate text-xs leading-5 text-gray-500">{product.category}</p>
               </div>
             </div>
-            <button onClick={() => handleDeleteProduct(product._id)}
-              className="bg-red-500 hover:bg-red-700 text-white px-2 h-8 rounded-md "
-            >Delete</button>
-            <button onClick={() => handleModify(product)}
-              className="bg-blue-500 hover:bg-blue-700 text-white px-2 h-8 rounded-md "
-            >Modify</button>
-
+            <button
+              onClick={() => openDeleteModal(product._id)}
+              className="bg-red-500 hover:bg-red-700 text-white px-2 h-8 rounded-md"
+            >
+              Delete
+            </button>
+            <button
+              onClick={() => handleModify(product)}
+              className="bg-blue-500 hover:bg-blue-700 text-white px-2 h-8 rounded-md"
+            >
+              Modify
+            </button>
           </li>
         ))}
       </ul>
@@ -94,7 +113,7 @@ export default function ProductsAdmin() {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="category" className="block text-sm font-medium text-gray-700">category</label>
+                <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
                 <input
                   id="category"
                   type="text"
@@ -105,7 +124,7 @@ export default function ProductsAdmin() {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="price" className="block text-sm font-medium text-gray-700">price</label>
+                <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price</label>
                 <input
                   id="price"
                   type="text"
@@ -135,13 +154,35 @@ export default function ProductsAdmin() {
         </div>
       )}
 
+      {showDeleteModal && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-lg font-semibold mb-4">Confirm Deletion</h2>
+            <p>Are you sure you want to delete this product?</p>
+            <div className="flex justify-end mt-4">
+              <button
+                className="mr-2 bg-gray-200 hover:bg-gray-300 py-1.5 px-4 rounded-lg"
+                onClick={closeDeleteModal}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-red-500 hover:bg-red-600 text-white py-1.5 px-4 rounded-lg"
+                onClick={handleDeleteProduct}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-10 rounded"
-        onClick={() => navigate('/admin/addProduct')}
+        onClick={() => navigate("/admin/addProduct")}
       >
         Add Product
       </button>
-
     </>
-  )
+  );
 }

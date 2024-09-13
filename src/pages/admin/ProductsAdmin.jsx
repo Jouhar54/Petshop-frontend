@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function ProductsAdmin() {
   const dispatch = useDispatch()
-  const { items=[], status, error } = useSelector(state => state.products);
+  const { items = [], status, error } = useSelector(state => state.products);
   const [editingProduct, setEditingProduct] = useState(null);
   const [editFormData, setEditFormData] = useState({
     name: "",
@@ -44,33 +44,40 @@ export default function ProductsAdmin() {
       category: editFormData.category,
       price: editFormData.price,
     };
-    dispatch(editProduct({updatedProduct, _id:editingProduct._id}))
+    dispatch(editProduct({ updatedProduct, _id: editingProduct._id }))
+    dispatch(fetchProducts());
+    setEditingProduct(null);
+  };
+
+  const handleDeleteProduct = (productId) => {
+    dispatch(deleteProduct({ id: productId }))
+    dispatch(fetchProducts());
   };
 
   return (
     <>
-    <ul role="list" className="divide-y divide-gray-300 ml-10">
-      {items.map((product) => (
-        <li key={product._id} className="flex justify-between gap-x-6 py-5">
-          <div className="flex min-w-0 gap-x-4">
-            <img className="h-12 w-12 flex-none rounded-sm bg-gray-50" src={product.imageSrc} alt={product.imageAlt} />
-            <div className="min-w-0 flex-auto">
-              <p className="text-sm font-semibold leading-6 text-gray-900">{product.name}</p>
-              <p className="mt-1 truncate text-xs leading-5 text-gray-500">{product.category}</p>
+      <ul role="list" className="divide-y divide-gray-300 ml-10">
+        {items.map((product) => (
+          <li key={product._id} className="flex justify-between gap-x-6 py-5">
+            <div className="flex min-w-0 gap-x-4">
+              <img className="h-12 w-12 flex-none rounded-sm bg-gray-50" src={product.imageSrc} alt={product.imageAlt} />
+              <div className="min-w-0 flex-auto">
+                <p className="text-sm font-semibold leading-6 text-gray-900">{product.name}</p>
+                <p className="mt-1 truncate text-xs leading-5 text-gray-500">{product.category}</p>
+              </div>
             </div>
-          </div>
-            <button onClick={()=>dispatch(deleteProduct({id:product._id}))}
+            <button onClick={() => handleDeleteProduct(product._id)}
               className="bg-red-500 hover:bg-red-700 text-white px-2 h-8 rounded-md "
-              >Delete</button>
-            <button onClick={() => handleModify(product)} 
+            >Delete</button>
+            <button onClick={() => handleModify(product)}
               className="bg-blue-500 hover:bg-blue-700 text-white px-2 h-8 rounded-md "
-              >Modify</button>
-          
-        </li>
-      ))}
-    </ul>
+            >Modify</button>
 
-    {editingProduct && (
+          </li>
+        ))}
+      </ul>
+
+      {editingProduct && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-lg font-semibold mb-4">Edit Product</h2>
@@ -128,13 +135,13 @@ export default function ProductsAdmin() {
         </div>
       )}
 
-    <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-10 rounded"
-      onClick={()=> navigate('/admin/addProduct')}
-    >
-      Add Product
-    </button>
-    
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-10 rounded"
+        onClick={() => navigate('/admin/addProduct')}
+      >
+        Add Product
+      </button>
+
     </>
   )
 }

@@ -3,6 +3,8 @@ import * as Yup from 'yup';
 import api from '../../utils/axiosIntersepter';
 import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import { fetchProducts } from '../../slices/productSlice';
+import { useDispatch } from 'react-redux';
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -14,7 +16,8 @@ const validationSchema = Yup.object({
 });
 
 const AddNewProduct = () => {
-  const [error, setError] = useState(null); // To hold error messages
+  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
   const notify = () => toast.success('Product Added Successfully');
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -31,6 +34,7 @@ const AddNewProduct = () => {
         },
       });
       notify();
+      dispatch(fetchProducts());
       resetForm();
     } catch (err) {
       setError(`Failed to add product: ${err.message}`);
